@@ -11,11 +11,67 @@ package model;
  */
 public class Cliente extends Pessoa{
     String email,endereco;
-
-    public Cliente(String nome,String telefone,int cpf,int codigo,String email, String endereco) {
-        super(nome,telefone,cpf,codigo);
+    
+    public Cliente(String email, String endereco, String nome, String telefone, String bairro, String dataNasc, int cpf, int codigo, int numero, int rg, String dataCadastro) {
+        super(nome, telefone, bairro, dataNasc, cpf, codigo, numero, rg, dataCadastro);
         this.email = email;
         this.endereco = endereco;
+    }
+    public Cliente(){
+        
+    }
+
+    public String getDataNasc() {
+        return dataNasc;
+    }
+
+    public void setDataNasc(String dataNasc) {
+        this.dataNasc = dataNasc;
+    }
+
+    public String getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(String dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public int getRg() {
+        return rg;
+    }
+
+    public void setRg(int rg) {
+        this.rg = rg;
+    }
+
+  
+    
+
+    
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
     public String getEmail() {

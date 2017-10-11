@@ -29,13 +29,16 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
         try {
             Conexao conexao = new Conexao();
             String sql = "INSERT INTO Pessoa (nomeCliente,cpfCliente,telefoneCliente,e-mailCliente"
-                    + "enderecoCliente) VALUES (?,?,?,?,?)";
-            PreparedStatement ps = conexao.con.prepareStatement(sql);
+                    + "enderecoCliente,numeroCliente,bairroCliente) VALUES (?,?,?,?,?,?,?)";
+            PreparedStatement ps = conexao.getConnection().prepareStatement(sql);
             ps.setString(1, cliente.getNome());
             ps.setInt(2, cliente.getCpf());
             ps.setString(3, cliente.getTelefone());
             ps.setString(4,cliente.getEmail());
-            ps.setString(5,cliente.getEndereco());            
+            ps.setString(5,cliente.getEndereco());
+            ps.setInt(6,cliente.getNumero());
+            ps.setString(7,cliente.getBairro());
+            
             ps.execute();
             
         } catch (SQLException ex) {
@@ -48,7 +51,7 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
         try {
          Conexao conexao = new Conexao();
          String sql = "delete from produto where idProduto = ?";
-         PreparedStatement ps = conexao.con.prepareStatement(sql);
+         PreparedStatement ps = conexao.getConnection().prepareStatement(sql);
          ps.setInt(1,cliente.getCodigo());
          
           JOptionPane.showMessageDialog(null," Exclusão realizada com sucesso!");
