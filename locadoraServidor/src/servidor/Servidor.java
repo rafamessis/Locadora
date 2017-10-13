@@ -19,7 +19,7 @@ import java.rmi.registry.Registry;
 public class Servidor {
     public static void main(String[] args) {
         try{
-            Interface objetoRemoto = new Implementacao();
+            Interface objetoRemoto = new Implementacao() {};
             //InterfaceProduto objetoRemotoProduto = new ImplementacaoProduto();
             Registry conexao = LocateRegistry.createRegistry(1500);
             System.out.println("Servidor conectado!");

@@ -8,6 +8,7 @@ package controller;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import model.Cliente;
+import model.Funcionarios;
 
 
 /**
@@ -17,5 +18,7 @@ import model.Cliente;
 public interface Interface extends Remote{
     public String inserirCliente(Cliente c) throws RemoteException;
     public String removerCliente(Cliente c) throws RemoteException;
+    
+    public String inserirFuncionario(Funcionarios f) throws RemoteException;
     
 }

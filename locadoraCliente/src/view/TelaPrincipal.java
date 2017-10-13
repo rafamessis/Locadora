@@ -12,7 +12,7 @@ package view;
 public class TelaPrincipal extends javax.swing.JFrame {
 
     /**
-     * Creates new form TelaPrincipal
+     * Creates new form TelaPrinciapl
      */
     public TelaPrincipal() {
         initComponents();
@@ -27,57 +27,55 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        PainelPrincipal = new javax.swing.JPanel();
+        Pprincipal = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        menuCliente = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        PainelPrincipal.setBackground(new java.awt.Color(0, 0, 51));
+        Pprincipal.setBackground(new java.awt.Color(0, 0, 51));
 
-        javax.swing.GroupLayout PainelPrincipalLayout = new javax.swing.GroupLayout(PainelPrincipal);
-        PainelPrincipal.setLayout(PainelPrincipalLayout);
-        PainelPrincipalLayout.setHorizontalGroup(
-            PainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 636, Short.MAX_VALUE)
+        javax.swing.GroupLayout PprincipalLayout = new javax.swing.GroupLayout(Pprincipal);
+        Pprincipal.setLayout(PprincipalLayout);
+        PprincipalLayout.setHorizontalGroup(
+            PprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 719, Short.MAX_VALUE)
         );
-        PainelPrincipalLayout.setVerticalGroup(
-            PainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+        PprincipalLayout.setVerticalGroup(
+            PprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 487, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("Cadastro");
+        menuCliente.setText("Cadastro");
+        menuCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuClienteActionPerformed(evt);
+            }
+        });
 
-        jMenuItem1.setText("Cadastro Clientes");
+        jMenuItem1.setText("Clientes");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        menuCliente.add(jMenuItem1);
 
-        jMenuItem2.setText("Cadastro Filmes");
-        jMenu1.add(jMenuItem2);
+        jMenuItem2.setText("Funcionarios");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        menuCliente.add(jMenuItem2);
 
-        jMenuItem3.setText("Cadastro Funcionario");
-        jMenu1.add(jMenuItem3);
+        jMenuBar1.add(menuCliente);
 
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Movimento");
+        jMenu2.setText("Edit");
         jMenuBar1.add(jMenu2);
-
-        jMenu3.setText("Devolução");
-        jMenuBar1.add(jMenu3);
-
-        jMenu4.setText("Sobre");
-        jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
 
@@ -85,23 +83,39 @@ public class TelaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PainelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Pprincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PainelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Pprincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+       Funcionarioview obj = new Funcionarioview();
+       Pprincipal.add(obj);
+       obj.setVisible(true);
+        
+        
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-       CadClientes obj = new CadClientes();
-        PainelPrincipal.add(obj);
-        obj.setVisible(true);
+       Clienteview obj = new Clienteview();
+       Pprincipal.add(obj);
+       obj.setVisible(true);
+       
+        
         
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void menuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuClienteActionPerformed
+        
+       
+        
+    }//GEN-LAST:event_menuClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -129,6 +143,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -139,14 +154,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel PainelPrincipal;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JPanel Pprincipal;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenu menuCliente;
     // End of variables declaration//GEN-END:variables
+
 }

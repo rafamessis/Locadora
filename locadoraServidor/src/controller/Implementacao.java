@@ -14,12 +14,13 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Pessoa;
 import model.Cliente;
+import model.Funcionarios;
 
 /**
  *
  * @author Rafael
  */
-public class Implementacao extends UnicastRemoteObject implements Interface{
+public abstract class Implementacao extends UnicastRemoteObject implements Interface{
     
     public Implementacao()throws RemoteException{}
     
@@ -61,6 +62,26 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
         return null;
         
     
+    }
+    public String inserirFuncionario(Funcionarios funcionarios){
+        try {
+            Conexao conexao = new Conexao();
+            String sql = "INSERT INTO Pessoa (nomeFuncionario,cpfFuncionario,telefoneFuncionario"
+                    + "salarioFuncionario,cargahorararia) VALUES (?,?,?,?,?,?,?)";
+            PreparedStatement ps = conexao.getConnection().prepareStatement(sql);
+            ps.setString(1, funcionarios.getNome());
+            ps.setInt(2, funcionarios.getCpf());
+            ps.setString(3, funcionarios.getTelefone());
+            ps.setFloat(4,funcionarios.getSalario());
+            ps.setString(5,funcionarios.getCargahoraria());
+            
+            
+            ps.execute();
+            
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return "Inserido Com sucesso!";
     }
 }
 

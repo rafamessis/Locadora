@@ -45,11 +45,6 @@ public class Cliente extends Pessoa{
         this.rg = rg;
     }
 
-  
-    
-
-    
-
     public String getBairro() {
         return bairro;
     }
