@@ -5,11 +5,13 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Rafael
  */
-public class Cliente extends Pessoa{
+public class Cliente extends Pessoa implements Serializable{
     String email,endereco;
     
     public Cliente(String email, String endereco, String nome, String telefone, String bairro, String dataNasc, int cpf, int codigo, int numero, int rg, String dataCadastro) {

@@ -9,8 +9,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Pessoa;
 import model.Cliente;
@@ -28,10 +26,10 @@ public abstract class Implementacao extends UnicastRemoteObject implements Inter
     @Override
     public String inserirCliente(Cliente cliente){
         try {
-            Conexao conexao = new Conexao();
-            String sql = "INSERT INTO Pessoa (nomeCliente,cpfCliente,telefoneCliente,e-mailCliente"
+            //Conexao conexao = new Conexao();
+            String sql = "INSERT INTO cliente (nomeCliente,cpfCliente,telefoneCliente,emailCliente"
                     + "enderecoCliente,numeroCliente,bairroCliente) VALUES (?,?,?,?,?,?,?)";
-            PreparedStatement ps = conexao.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Conexao.getConnection().prepareStatement(sql);
             ps.setString(1, cliente.getNome());
             ps.setInt(2, cliente.getCpf());
             ps.setString(3, cliente.getTelefone());
@@ -43,7 +41,7 @@ public abstract class Implementacao extends UnicastRemoteObject implements Inter
             ps.execute();
             
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("Erro"+ex.getMessage());
         }
         return "Inserido Com sucesso!";
     }

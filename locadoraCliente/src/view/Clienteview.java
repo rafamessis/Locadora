@@ -35,6 +35,7 @@ public class Clienteview extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         nomeCliente = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -248,8 +249,7 @@ public class Clienteview extends javax.swing.JInternalFrame {
       
       client.setCodigo(Integer.parseInt(codCliente.getText()));
       client.setNome(nomeCliente.getText());
-      client.setCpf(Integer.parseInt(cpfCliente.getText()));
-      client.setRg(Integer.parseInt(rgCliente.getText()));    
+      client.setCpf(Integer.parseInt(cpfCliente.getText()));       
       client.setDataCadastro(cadCliente.getText());
       client.setTelefone(telCliente.getText());
       client.setEndereco(enderecoCliente.getText());
@@ -296,6 +296,7 @@ public class Clienteview extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField nascCliente;
     private javax.swing.JTextField nomeCliente;

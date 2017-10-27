@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class Conexao {
     private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/lojavendas";
+    private static final String URL = "jdbc:mysql://localhost/locadorafilme";
     private static final String USER = "root";
     private static final String PASS = "root";
     
@@ -29,6 +29,7 @@ public class Conexao {
             return DriverManager.getConnection(URL,USER,PASS);
             
         }catch (ClassNotFoundException | SQLException ex){
+            System.out.println(ex.getMessage());
             throw new RuntimeException("Erro na conexão: ", ex);
         }
     }
