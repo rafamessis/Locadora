@@ -10,7 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import model.Pessoa;
+
 import model.Cliente;
 import model.Funcionarios;
 
@@ -18,19 +18,22 @@ import model.Funcionarios;
  *
  * @author Rafael
  */
-public abstract class Implementacao extends UnicastRemoteObject implements Interface{
+public class Implementacao extends UnicastRemoteObject implements Interface{
     
     public Implementacao()throws RemoteException{}
     
     
     @Override
     public String inserirCliente(Cliente cliente){
+        
         try {
             //Conexao conexao = new Conexao();
-            String sql = "INSERT INTO cliente (nomeCliente,cpfCliente,telefoneCliente,emailCliente"
-                    + "enderecoCliente,numeroCliente,bairroCliente) VALUES (?,?,?,?,?,?,?)";
+            String sql = ("INSERT INTO cliente (nomeCliente,cpfCliente,telefoneCliente,emailCliente,"
+                    + "enderecoCliente,numeroCliente,bairroCliente) VALUES (?, ?, ?, ?, ?, ?, ?)");
             PreparedStatement ps = Conexao.getConnection().prepareStatement(sql);
-            ps.setString(1, cliente.getNome());
+            
+            ps.setString(1,cliente.getNome());
+            
             ps.setInt(2, cliente.getCpf());
             ps.setString(3, cliente.getTelefone());
             ps.setString(4,cliente.getEmail());
@@ -81,5 +84,7 @@ public abstract class Implementacao extends UnicastRemoteObject implements Inter
         }
         return "Inserido Com sucesso!";
     }
+
+   
 }
 

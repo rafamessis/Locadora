@@ -18,7 +18,6 @@ import model.Funcionarios;
 public interface Interface extends Remote{
     public String inserirCliente(Cliente c) throws RemoteException;
     public String removerCliente(Cliente c) throws RemoteException;
-    
     public String inserirFuncionario(Funcionarios f) throws RemoteException;
     
 }

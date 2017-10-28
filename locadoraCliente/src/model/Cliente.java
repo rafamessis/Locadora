@@ -23,54 +23,6 @@ public class Cliente extends Pessoa implements Serializable{
         
     }
 
-    public String getDataNasc() {
-        return dataNasc;
-    }
-
-    public void setDataNasc(String dataNasc) {
-        this.dataNasc = dataNasc;
-    }
-
-    public String getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(String dataCadastro) {
-        this.dataCadastro = dataCadastro;
-    }
-
-    public int getRg() {
-        return rg;
-    }
-
-    public void setRg(int rg) {
-        this.rg = rg;
-    }
-
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public int getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -87,30 +39,6 @@ public class Cliente extends Pessoa implements Serializable{
         this.endereco = endereco;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public int getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(int cpf) {
-        this.cpf = cpf;
-    }
-    
     
     
     

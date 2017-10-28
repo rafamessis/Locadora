@@ -5,11 +5,13 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Rafael
  */
-public class Pessoa {
+public class Pessoa implements Serializable{
     String nome,telefone,bairro,dataNasc,dataCadastro;
     int cpf,codigo,numero,rg;
 
@@ -94,6 +96,14 @@ public class Pessoa {
 
     public void setCpf(int cpf) {
         this.cpf = cpf;
+    }
+
+    public String getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(String dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
     
     
