@@ -10,8 +10,8 @@ package model;
  * @author Rafael
  */
 public class Funcionarios extends Pessoa{
-    float salario;
-    String cargahoraria;
+    protected float salario;
+    protected String cargahoraria;
     
     public Funcionarios(float salario, String cargahoraria, String nome, String telefone, String cidade, String dataNasc, int cpf, int codigo, int numero, int rg, String dataCadastro) {
         super(nome, telefone, cidade, dataNasc, cpf, codigo, numero, rg, dataCadastro);

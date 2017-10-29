@@ -12,8 +12,8 @@ import java.io.Serializable;
  * @author Rafael
  */
 public class Pessoa implements Serializable {
-    String nome,telefone,cidade,dataNasc,dataCadastro;
-    int cpf,codigo,numero,rg;
+    protected String nome,telefone,cidade,dataNasc,dataCadastro;
+    protected int cpf,codigo,numero,rg;
 
     public Pessoa(String nome, String telefone, String cidade, String dataNasc, int cpf, int codigo, int numero, int rg,String dataCadastro) {
         this.nome = nome;
