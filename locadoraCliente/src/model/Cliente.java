@@ -14,8 +14,8 @@ import java.io.Serializable;
 public class Cliente extends Pessoa implements Serializable{
     String email,endereco;
     
-    public Cliente(String email, String endereco, String nome, String telefone, String bairro, String dataNasc, int cpf, int codigo, int numero, int rg, String dataCadastro) {
-        super(nome, telefone, bairro, dataNasc, cpf, codigo, numero, rg, dataCadastro);
+    public Cliente(String email, String endereco, String nome, String telefone, String cidade, String dataNasc, int cpf, int codigo, int numero, int rg, String dataCadastro) {
+        super(nome, telefone, cidade, dataNasc, cpf, codigo, numero, rg, dataCadastro);
         this.email = email;
         this.endereco = endereco;
     }

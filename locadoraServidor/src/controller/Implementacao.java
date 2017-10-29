@@ -29,7 +29,7 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
         try {
             //Conexao conexao = new Conexao();
             String sql = ("INSERT INTO cliente (nomeCliente,cpfCliente,telefoneCliente,emailCliente,"
-                    + "enderecoCliente,numeroCliente,bairroCliente) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                    + "enderecoCliente,cidadeCliente) VALUES (?, ?, ?, ?, ?, ?)");
             PreparedStatement ps = Conexao.getConnection().prepareStatement(sql);
             
             ps.setString(1,cliente.getNome());
@@ -38,8 +38,7 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
             ps.setString(3, cliente.getTelefone());
             ps.setString(4,cliente.getEmail());
             ps.setString(5,cliente.getEndereco());
-            ps.setInt(6,cliente.getNumero());
-            ps.setString(7,cliente.getBairro());
+            ps.setString(6,cliente.getCidade());
             
             ps.execute();
             

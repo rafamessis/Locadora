@@ -13,8 +13,8 @@ public class Funcionarios extends Pessoa{
     float salario;
     String cargahoraria;
     
-    public Funcionarios(float salario, String cargahoraria, String nome, String telefone, String bairro, String dataNasc, int cpf, int codigo, int numero, int rg, String dataCadastro) {
-        super(nome, telefone, bairro, dataNasc, cpf, codigo, numero, rg, dataCadastro);
+    public Funcionarios(float salario, String cargahoraria, String nome, String telefone, String cidade, String dataNasc, int cpf, int codigo, int numero, int rg, String dataCadastro) {
+        super(nome, telefone, cidade, dataNasc, cpf, codigo, numero, rg, dataCadastro);
         this.salario = salario;
         this.cargahoraria = cargahoraria;
     }
@@ -55,12 +55,12 @@ public class Funcionarios extends Pessoa{
         this.telefone = telefone;
     }
 
-    public String getBairro() {
-        return bairro;
+    public String getCidade() {
+        return cidade;
     }
 
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
     public String getDataNasc() {

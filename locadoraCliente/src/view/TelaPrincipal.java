@@ -29,10 +29,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         Pprincipal = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        menuCliente = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menuCadastros = new javax.swing.JMenu();
+        cadClientes = new javax.swing.JMenuItem();
+        cadFuncionarios = new javax.swing.JMenuItem();
+        cadCategorias = new javax.swing.JMenuItem();
+        cadDistribuidoras = new javax.swing.JMenuItem();
+        cadFilmes = new javax.swing.JMenuItem();
+        cadGeneros = new javax.swing.JMenuItem();
+        cadTiposMidia = new javax.swing.JMenuItem();
+        menuLancamentos = new javax.swing.JMenu();
+        lancLocacao = new javax.swing.JMenuItem();
+        menuSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,36 +53,96 @@ public class TelaPrincipal extends javax.swing.JFrame {
         );
         PprincipalLayout.setVerticalGroup(
             PprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 487, Short.MAX_VALUE)
+            .addGap(0, 650, Short.MAX_VALUE)
         );
 
-        menuCliente.setText("Cadastro");
-        menuCliente.addActionListener(new java.awt.event.ActionListener() {
+        menuCadastros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/Novo.png"))); // NOI18N
+        menuCadastros.setText("Cadastros");
+        menuCadastros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuClienteActionPerformed(evt);
+                menuCadastrosActionPerformed(evt);
             }
         });
 
-        jMenuItem1.setText("Clientes");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        cadClientes.setText("Clientes");
+        cadClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                cadClientesActionPerformed(evt);
             }
         });
-        menuCliente.add(jMenuItem1);
+        menuCadastros.add(cadClientes);
 
-        jMenuItem2.setText("Funcionarios");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        cadFuncionarios.setText("Funcionarios");
+        cadFuncionarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                cadFuncionariosActionPerformed(evt);
             }
         });
-        menuCliente.add(jMenuItem2);
+        menuCadastros.add(cadFuncionarios);
 
-        jMenuBar1.add(menuCliente);
+        cadCategorias.setText("Categorias");
+        cadCategorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadCategoriasActionPerformed(evt);
+            }
+        });
+        menuCadastros.add(cadCategorias);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        cadDistribuidoras.setText("Distribuidoras");
+        cadDistribuidoras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadDistribuidorasActionPerformed(evt);
+            }
+        });
+        menuCadastros.add(cadDistribuidoras);
+
+        cadFilmes.setText("Filmes");
+        cadFilmes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadFilmesActionPerformed(evt);
+            }
+        });
+        menuCadastros.add(cadFilmes);
+
+        cadGeneros.setText("Gêneros");
+        cadGeneros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadGenerosActionPerformed(evt);
+            }
+        });
+        menuCadastros.add(cadGeneros);
+
+        cadTiposMidia.setText("Tipos de Mídia");
+        cadTiposMidia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadTiposMidiaActionPerformed(evt);
+            }
+        });
+        menuCadastros.add(cadTiposMidia);
+
+        jMenuBar1.add(menuCadastros);
+
+        menuLancamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/contract.png"))); // NOI18N
+        menuLancamentos.setText("Lançamento");
+
+        lancLocacao.setText("Locação");
+        lancLocacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lancLocacaoActionPerformed(evt);
+            }
+        });
+        menuLancamentos.add(lancLocacao);
+
+        jMenuBar1.add(menuLancamentos);
+
+        menuSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/Sair.png"))); // NOI18N
+        menuSair.setText("Sair");
+        menuSair.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuSairMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(menuSair);
 
         setJMenuBar(jMenuBar1);
 
@@ -87,21 +154,23 @@ public class TelaPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Pprincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Pprincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void cadFuncionariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadFuncionariosActionPerformed
        Funcionarioview obj = new Funcionarioview();
        Pprincipal.add(obj);
        obj.setVisible(true);
         
         
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_cadFuncionariosActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void cadClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadClientesActionPerformed
        Clienteview obj = new Clienteview();
        Pprincipal.add(obj);
        obj.setVisible(true);
@@ -109,13 +178,60 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         
         
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_cadClientesActionPerformed
 
-    private void menuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuClienteActionPerformed
+    private void menuCadastrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrosActionPerformed
         
        
         
-    }//GEN-LAST:event_menuClienteActionPerformed
+    }//GEN-LAST:event_menuCadastrosActionPerformed
+
+    private void menuSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSairMouseClicked
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_menuSairMouseClicked
+
+    private void cadCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadCategoriasActionPerformed
+        // TODO add your handling code here:
+        Categoriaview obj = new Categoriaview();
+        Pprincipal.add(obj);
+        obj.setVisible(true);
+    }//GEN-LAST:event_cadCategoriasActionPerformed
+
+    private void cadDistribuidorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadDistribuidorasActionPerformed
+        // TODO add your handling code here:
+        Distribuidoraview obj = new Distribuidoraview();
+        Pprincipal.add(obj);
+        obj.setVisible(true);
+    }//GEN-LAST:event_cadDistribuidorasActionPerformed
+
+    private void cadFilmesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadFilmesActionPerformed
+        // TODO add your handling code here:
+        Filmeview obj = new Filmeview();
+        Pprincipal.add(obj);
+        obj.setVisible(true);
+    }//GEN-LAST:event_cadFilmesActionPerformed
+
+    private void cadGenerosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadGenerosActionPerformed
+        // TODO add your handling code here:
+        Generoview obj = new Generoview();
+        Pprincipal.add(obj);
+        obj.setVisible(true);
+    }//GEN-LAST:event_cadGenerosActionPerformed
+
+    private void cadTiposMidiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadTiposMidiaActionPerformed
+        // TODO add your handling code here:
+        TipoMidiaview obj = new TipoMidiaview();
+        Pprincipal.add(obj);
+        obj.setVisible(true);
+    }//GEN-LAST:event_cadTiposMidiaActionPerformed
+
+    private void lancLocacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lancLocacaoActionPerformed
+        // TODO add your handling code here:
+        Locacaoview obj = new Locacaoview();
+        Pprincipal.add(obj);
+        obj.setVisible(true);
+    }//GEN-LAST:event_lancLocacaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -155,11 +271,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Pprincipal;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem cadCategorias;
+    private javax.swing.JMenuItem cadClientes;
+    private javax.swing.JMenuItem cadDistribuidoras;
+    private javax.swing.JMenuItem cadFilmes;
+    private javax.swing.JMenuItem cadFuncionarios;
+    private javax.swing.JMenuItem cadGeneros;
+    private javax.swing.JMenuItem cadTiposMidia;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenu menuCliente;
+    private javax.swing.JMenuItem lancLocacao;
+    private javax.swing.JMenu menuCadastros;
+    private javax.swing.JMenu menuLancamentos;
+    private javax.swing.JMenu menuSair;
     // End of variables declaration//GEN-END:variables
 
 }

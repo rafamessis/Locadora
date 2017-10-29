@@ -12,13 +12,13 @@ import java.io.Serializable;
  * @author Rafael
  */
 public class Pessoa implements Serializable {
-    String nome,telefone,bairro,dataNasc,dataCadastro;
+    String nome,telefone,cidade,dataNasc,dataCadastro;
     int cpf,codigo,numero,rg;
 
-    public Pessoa(String nome, String telefone, String bairro, String dataNasc, int cpf, int codigo, int numero, int rg,String dataCadastro) {
+    public Pessoa(String nome, String telefone, String cidade, String dataNasc, int cpf, int codigo, int numero, int rg,String dataCadastro) {
         this.nome = nome;
         this.telefone = telefone;
-        this.bairro = bairro;
+        this.cidade = cidade;
         this.dataNasc = dataNasc;
         this.cpf = cpf;
         this.codigo = codigo;
@@ -50,12 +50,12 @@ public class Pessoa implements Serializable {
         this.rg = rg;
     }
    
-   public String getBairro() {
-        return bairro;
+   public String getCidade() {
+        return cidade;
     }
 
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
     public int getNumero() {
