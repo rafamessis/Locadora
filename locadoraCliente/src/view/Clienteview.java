@@ -399,7 +399,7 @@ public class Clienteview extends javax.swing.JInternalFrame {
         enderecoCliente.setText(cliente.getEndereco());
         cidCliente.setText(cliente.getCidade());
         
-        codigoAtual = cliente.getCodigo(); //Nome parametro para alterar
+        codigoAtual = cliente.getCodigo();
         
         nomeCliente.setEnabled(true);
         cpfCliente.setEnabled(true);

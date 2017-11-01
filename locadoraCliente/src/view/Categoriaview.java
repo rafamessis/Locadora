@@ -5,17 +5,56 @@
  */
 package view;
 
+import controller.Interface;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.text.DecimalFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.Categoria;
+
+
 /**
  *
  * @author Hudson
  */
 public class Categoriaview extends javax.swing.JInternalFrame {
 
+    List<Categoria> categorias = null;
+    int codigoAtual = 0;
+    DecimalFormat valorFormatado = new DecimalFormat("0.00");
+    
     /**
      * Creates new form Categoriaview
      */
     public Categoriaview() {
         initComponents();
+        preencheTabela();
+    }
+    
+    public void preencheTabela(){
+        
+        try{
+        Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+        Interface objetoRemoto = (Interface) conexao.lookup("chave");
+        
+        DefaultTableModel tabela = (DefaultTableModel)tabelaCategoria.getModel();
+        tabelaCategoria.setRowSorter(new TableRowSorter(tabela));
+        tabela.setNumRows(0);
+        categorias = objetoRemoto.listaCategoria();
+        for(int i=0;i<categorias.size();i++){
+            tabela.addRow(new Object[]{categorias.get(i).getCodigo(),categorias.get(i).getNome(),categorias.get(i).getValorLoc()});
+        }
+    } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        } catch (NotBoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
     }
 
     /**
@@ -32,9 +71,13 @@ public class Categoriaview extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaCategoria = new javax.swing.JTable();
         campoCodigo = new javax.swing.JTextField();
         campoDescricao = new javax.swing.JTextField();
+        botaoNovo = new javax.swing.JButton();
+        botaoCancelar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        campoValor = new javax.swing.JTextField();
 
         setClosable(true);
         setTitle("Cadastro de Categorias");
@@ -42,37 +85,74 @@ public class Categoriaview extends javax.swing.JInternalFrame {
 
         botaoSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/GravarPequeno.png"))); // NOI18N
         botaoSalvar.setText("Salvar");
+        botaoSalvar.setEnabled(false);
+        botaoSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoSalvarActionPerformed(evt);
+            }
+        });
 
         botaoExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/ExcluirPequeno.png"))); // NOI18N
         botaoExcluir.setText("Excluir");
+        botaoExcluir.setEnabled(false);
+        botaoExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoExcluirActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Código:");
 
         jLabel2.setText("Descrição:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaCategoria.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "Código", "Descrição"
+                "Código", "Descrição", "Valor Locação"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        tabelaCategoria.getTableHeader().setReorderingAllowed(false);
+        tabelaCategoria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaCategoriaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabelaCategoria);
 
         campoCodigo.setEnabled(false);
+
+        campoDescricao.setEnabled(false);
+
+        botaoNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/NovoPequeno.png"))); // NOI18N
+        botaoNovo.setText("Novo");
+        botaoNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoNovoActionPerformed(evt);
+            }
+        });
+
+        botaoCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/CancelarPequeno.png"))); // NOI18N
+        botaoCancelar.setText("Cancelar");
+        botaoCancelar.setEnabled(false);
+        botaoCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCancelarActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Valor:");
+
+        campoValor.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,24 +160,30 @@ public class Categoriaview extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(campoDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(campoDescricao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(campoValor, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(campoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(botaoNovo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botaoSalvar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botaoExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botaoCancelar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(botaoSalvar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(botaoExcluir)
-                .addGap(52, 52, 52))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,28 +195,155 @@ public class Categoriaview extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(campoDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(campoValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoSalvar)
-                    .addComponent(botaoExcluir))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addComponent(botaoExcluir)
+                    .addComponent(botaoNovo)
+                    .addComponent(botaoCancelar))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tabelaCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCategoriaMouseClicked
+        // TODO add your handling code here:
+        Categoria categoria = categorias.get(tabelaCategoria.getSelectedRow());
+        
+        campoCodigo.setText(String.valueOf(categoria.getCodigo()));
+        campoDescricao.setText(categoria.getNome());
+        campoValor.setText(valorFormatado.format(categoria.getValorLoc()));
+        
+         codigoAtual = categoria.getCodigo();
+         
+         campoCodigo.setEnabled(false);
+         campoDescricao.setEnabled(true);
+         campoValor.setEnabled(true);
+         botaoNovo.setEnabled(true);
+         botaoSalvar.setEnabled(true);
+         botaoExcluir.setEnabled(true);
+         botaoCancelar.setEnabled(true);
+        
+    }//GEN-LAST:event_tabelaCategoriaMouseClicked
+
+    private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
+        // TODO add your handling code here:
+        
+        campoDescricao.setEnabled(true);
+        campoValor.setEnabled(true);
+        campoCodigo.setText("");
+        campoDescricao.setText((""));
+        campoValor.setText("");
+        codigoAtual=0;
+        botaoNovo.setEnabled(false);
+        botaoSalvar.setEnabled(true);
+        botaoExcluir.setEnabled(false);
+        botaoCancelar.setEnabled(true);
+        tabelaCategoria.setVisible(false);
+    }//GEN-LAST:event_botaoNovoActionPerformed
+
+    private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
+        // TODO add your handling code here:
+        
+        if (!(campoDescricao.getText()).isEmpty() && !(campoValor.getText()).isEmpty()){
+            
+            Categoria categoria = new Categoria();
+
+            categoria.setNome(campoDescricao.getText());
+            categoria.setValorLoc(Double.parseDouble((campoValor.getText()).replaceAll(",", ".")));
+            
+            try {
+                Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                if(codigoAtual > 0){
+                    JOptionPane.showMessageDialog(this,objetoRemoto.atualizaCategoria(categoria,codigoAtual));
+                }else{
+                    JOptionPane.showMessageDialog(this,objetoRemoto.inserirCategoria(categoria));
+                }
+                campoDescricao.setEnabled(false);
+                campoValor.setEnabled(false);
+                campoCodigo.setText("");
+                campoDescricao.setText("");
+                campoValor.setText("");
+                codigoAtual=0;
+                botaoNovo.setEnabled(true);
+                botaoSalvar.setEnabled(false);
+                botaoExcluir.setEnabled(false);
+                botaoCancelar.setEnabled(false);
+                tabelaCategoria.setVisible(true);
+                preencheTabela();
+
+            } catch (RemoteException ex) {
+                System.out.println(ex.getMessage());
+            } catch (NotBoundException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(null,"Preenchimento de todos os campos obrigatório !");
+        }
+    }//GEN-LAST:event_botaoSalvarActionPerformed
+
+    private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+            Interface objetoRemoto = (Interface) conexao.lookup("chave");
+
+            JOptionPane.showMessageDialog(this,objetoRemoto.removerCategoria(codigoAtual));
+            
+            campoCodigo.setText("");
+            campoDescricao.setText("");
+            campoValor.setText("");
+            codigoAtual=0;
+            botaoSalvar.setEnabled(false);
+            botaoExcluir.setEnabled(false);
+            botaoCancelar.setEnabled(false);
+            preencheTabela();
+
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        } catch (NotBoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_botaoExcluirActionPerformed
+
+    private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
+        // TODO add your handling code here:
+        
+        campoDescricao.setEnabled(false);
+        campoValor.setEnabled(false);
+        campoCodigo.setText("");
+        campoDescricao.setText("");
+        campoValor.setText("");
+        codigoAtual=0;
+        botaoNovo.setEnabled(true);
+        botaoSalvar.setEnabled(false);
+        botaoExcluir.setEnabled(false);
+        botaoCancelar.setEnabled(false);
+        tabelaCategoria.setVisible(true);
+    }//GEN-LAST:event_botaoCancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botaoCancelar;
     private javax.swing.JButton botaoExcluir;
+    private javax.swing.JButton botaoNovo;
     private javax.swing.JButton botaoSalvar;
     private javax.swing.JTextField campoCodigo;
     private javax.swing.JTextField campoDescricao;
+    private javax.swing.JTextField campoValor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabelaCategoria;
     // End of variables declaration//GEN-END:variables
 }
