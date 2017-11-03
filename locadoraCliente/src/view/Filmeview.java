@@ -5,6 +5,23 @@
  */
 package view;
 
+import controller.Interface;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.Categoria;
+import model.Distribuidora;
+import model.Filmes;
+import model.Genero;
+import model.TipoMidia;
+
 /**
  *
  * @author Hudson
@@ -14,10 +31,42 @@ public class Filmeview extends javax.swing.JInternalFrame {
     /**
      * Creates new form filmeview
      */
+    
+    List<Filmes> filmes = null;
+    int codigoAtual = 0;
+    
+    Categoria categoria = new Categoria();
+    Genero genero = new Genero();
+    TipoMidia tipomidia = new TipoMidia();
+    Distribuidora distribuidora = new Distribuidora();
+    
     public Filmeview() {
         initComponents();
+        preencheTabela();
     }
 
+    
+    public void preencheTabela(){
+        
+        try{
+        Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+        Interface objetoRemoto = (Interface) conexao.lookup("chave");
+        
+        DefaultTableModel tabela = (DefaultTableModel)tabelaFilme.getModel();
+        tabelaFilme.setRowSorter(new TableRowSorter(tabela));
+        tabela.setNumRows(0);
+        filmes = objetoRemoto.listaFilmes();
+        for(int i=0;i<filmes.size();i++){
+            tabela.addRow(new Object[]{filmes.get(i).getCodigo(),filmes.get(i).getNome(), objetoRemoto.pegaGenero(filmes.get(i).getGenero()), objetoRemoto.pegaDistribuidora(filmes.get(i).getDistribuidora())});
+        }
+    } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        } catch (NotBoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,24 +88,26 @@ public class Filmeview extends javax.swing.JInternalFrame {
         campoNome = new javax.swing.JTextField();
         campoAtores = new javax.swing.JTextField();
         campoSinopse = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        codigoCategoria = new javax.swing.JTextField();
+        codigoGenero = new javax.swing.JTextField();
+        codigoTipoMidia = new javax.swing.JTextField();
+        codigoDistribuidora = new javax.swing.JTextField();
+        nomeCategoria = new javax.swing.JTextField();
+        botaoConsultaCategoria = new javax.swing.JButton();
+        botaoConsultaGenero = new javax.swing.JButton();
+        botaoConsultaTipoMidia = new javax.swing.JButton();
+        botaoConsultaDistribuidora = new javax.swing.JButton();
+        nomeGenero = new javax.swing.JTextField();
+        nomeTipoMidia = new javax.swing.JTextField();
+        nomeDistribuidora = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        tabelaFilme = new javax.swing.JTable();
+        botaoSalvar = new javax.swing.JButton();
+        botaoExcluir = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
+        campoQntd = new javax.swing.JTextField();
+        botaoNovo = new javax.swing.JButton();
+        botaoCancelar = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Cadastro de Filmes");
@@ -79,28 +130,87 @@ public class Filmeview extends javax.swing.JInternalFrame {
 
         campoCodigo.setEnabled(false);
 
-        jTextField1.setEnabled(false);
+        campoNome.setEnabled(false);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/PesquisarPequeno.png"))); // NOI18N
+        campoAtores.setEnabled(false);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/PesquisarPequeno.png"))); // NOI18N
+        campoSinopse.setEnabled(false);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/PesquisarPequeno.png"))); // NOI18N
+        codigoCategoria.setEnabled(false);
+        codigoCategoria.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                codigoCategoriaFocusLost(evt);
+            }
+        });
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/PesquisarPequeno.png"))); // NOI18N
+        codigoGenero.setEnabled(false);
+        codigoGenero.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                codigoGeneroFocusLost(evt);
+            }
+        });
 
-        jTextField2.setEnabled(false);
+        codigoTipoMidia.setEnabled(false);
+        codigoTipoMidia.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                codigoTipoMidiaFocusLost(evt);
+            }
+        });
 
-        jTextField3.setEnabled(false);
+        codigoDistribuidora.setEnabled(false);
+        codigoDistribuidora.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                codigoDistribuidoraFocusLost(evt);
+            }
+        });
 
-        jTextField4.setEnabled(false);
+        nomeCategoria.setEditable(false);
+        nomeCategoria.setEnabled(false);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        botaoConsultaCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/PesquisarPequeno.png"))); // NOI18N
+        botaoConsultaCategoria.setEnabled(false);
+        botaoConsultaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoConsultaCategoriaActionPerformed(evt);
+            }
+        });
+
+        botaoConsultaGenero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/PesquisarPequeno.png"))); // NOI18N
+        botaoConsultaGenero.setEnabled(false);
+        botaoConsultaGenero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoConsultaGeneroActionPerformed(evt);
+            }
+        });
+
+        botaoConsultaTipoMidia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/PesquisarPequeno.png"))); // NOI18N
+        botaoConsultaTipoMidia.setEnabled(false);
+        botaoConsultaTipoMidia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoConsultaTipoMidiaActionPerformed(evt);
+            }
+        });
+
+        botaoConsultaDistribuidora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/PesquisarPequeno.png"))); // NOI18N
+        botaoConsultaDistribuidora.setEnabled(false);
+        botaoConsultaDistribuidora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoConsultaDistribuidoraActionPerformed(evt);
+            }
+        });
+
+        nomeGenero.setEditable(false);
+        nomeGenero.setEnabled(false);
+
+        nomeTipoMidia.setEditable(false);
+        nomeTipoMidia.setEnabled(false);
+
+        nomeDistribuidora.setEditable(false);
+        nomeDistribuidora.setEnabled(false);
+
+        tabelaFilme.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Código", "Nome", "Gênero", "Distribuidora"
@@ -114,16 +224,52 @@ public class Filmeview extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        tabelaFilme.getTableHeader().setReorderingAllowed(false);
+        tabelaFilme.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaFilmeMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabelaFilme);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/GravarPequeno.png"))); // NOI18N
-        jButton5.setText("Salvar");
+        botaoSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/GravarPequeno.png"))); // NOI18N
+        botaoSalvar.setText("Salvar");
+        botaoSalvar.setEnabled(false);
+        botaoSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoSalvarActionPerformed(evt);
+            }
+        });
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/ExcluirPequeno.png"))); // NOI18N
-        jButton6.setText("Excluir");
+        botaoExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/ExcluirPequeno.png"))); // NOI18N
+        botaoExcluir.setText("Excluir");
+        botaoExcluir.setEnabled(false);
+        botaoExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoExcluirActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("Quantidade:");
+
+        campoQntd.setEnabled(false);
+
+        botaoNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/NovoPequeno.png"))); // NOI18N
+        botaoNovo.setText("Novo");
+        botaoNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoNovoActionPerformed(evt);
+            }
+        });
+
+        botaoCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/CancelarPequeno.png"))); // NOI18N
+        botaoCancelar.setText("Cancelar");
+        botaoCancelar.setEnabled(false);
+        botaoCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -141,7 +287,7 @@ public class Filmeview extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(campoQntd, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(10, 10, 10)
@@ -155,41 +301,45 @@ public class Filmeview extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(4, 4, 4)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(codigoCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(botaoConsultaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(6, 6, 6)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(nomeCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(4, 4, 4)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(codigoGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(6, 6, 6)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(botaoConsultaGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(6, 6, 6)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(nomeGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(4, 4, 4)
-                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(codigoTipoMidia, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(6, 6, 6)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(botaoConsultaTipoMidia, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(6, 6, 6)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(nomeTipoMidia, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addGap(4, 4, 4)
-                                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(codigoDistribuidora, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(botaoConsultaDistribuidora, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(6, 6, 6)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(nomeDistribuidora, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(jButton5)
-                        .addGap(54, 54, 54)
-                        .addComponent(jButton6)))
+                        .addGap(23, 23, 23)
+                        .addComponent(botaoNovo)
+                        .addGap(18, 18, 18)
+                        .addComponent(botaoSalvar)
+                        .addGap(18, 18, 18)
+                        .addComponent(botaoExcluir)
+                        .addGap(18, 18, 18)
+                        .addComponent(botaoCancelar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -203,7 +353,7 @@ public class Filmeview extends javax.swing.JInternalFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(campoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel9)
-                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(campoQntd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -225,60 +375,687 @@ public class Filmeview extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(jLabel3))
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(codigoCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botaoConsultaCategoria)
+                    .addComponent(nomeCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
+                    .addComponent(codigoGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botaoConsultaGenero)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(nomeGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3)
+                    .addComponent(codigoTipoMidia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botaoConsultaTipoMidia)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(nomeTipoMidia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4)
+                    .addComponent(codigoDistribuidora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botaoConsultaDistribuidora)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(nomeDistribuidora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(17, 17, 17)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addComponent(botaoSalvar)
+                    .addComponent(botaoExcluir)
+                    .addComponent(botaoNovo)
+                    .addComponent(botaoCancelar))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tabelaFilmeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaFilmeMouseClicked
+        // TODO add your handling code here:
+        Filmes filme = filmes.get(tabelaFilme.getSelectedRow());
+           
+        campoCodigo.setText(String.valueOf(filme.getCodigo()));
+        campoNome.setText(filme.getNome());
+        campoQntd.setText(String.valueOf(filme.getQtdDiscos()));
+        campoAtores.setText(filme.getAtores());
+        campoSinopse.setText(filme.getSinopse());
+        codigoCategoria.setText(String.valueOf(filme.getCategoria()));
+        codigoGenero.setText(String.valueOf(filme.getGenero()));
+        codigoTipoMidia.setText(String.valueOf(filme.getTipoMidia()));
+        codigoDistribuidora.setText(String.valueOf(filme.getDistribuidora()));
+        
+        codigoAtual = filme.getCodigo();
+        
+        campoCodigo.setEnabled(false);
+        campoNome.setEnabled(true);
+        campoQntd.setEnabled(true);
+        campoAtores.setEnabled(true);
+        campoSinopse.setEnabled(true);
+        codigoCategoria.setEnabled(true);
+        codigoGenero.setEnabled(true);
+        codigoTipoMidia.setEnabled(true);
+        codigoDistribuidora.setEnabled(true);
+        nomeCategoria.setEnabled(true);
+        nomeGenero.setEnabled(true);
+        nomeTipoMidia.setEnabled(true);
+        nomeDistribuidora.setEnabled(true);
+        botaoConsultaCategoria.setEnabled(true);
+        botaoConsultaGenero.setEnabled(true);
+        botaoConsultaTipoMidia.setEnabled(true);
+        botaoConsultaDistribuidora.setEnabled(true);
+        
+        botaoSalvar.setEnabled(true);
+        botaoExcluir.setEnabled(true);
+        botaoCancelar.setEnabled(true);
+        
+        codigoCategoria.requestFocus();
+        codigoGenero.requestFocus();
+        codigoTipoMidia.requestFocus();
+        codigoDistribuidora.requestFocus();
+        botaoSalvar.requestFocus();
+    }//GEN-LAST:event_tabelaFilmeMouseClicked
+
+    private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
+        // TODO add your handling code here:
+        
+        campoCodigo.setEnabled(false);
+        campoNome.setEnabled(true);
+        campoQntd.setEnabled(true);
+        campoAtores.setEnabled(true);
+        campoSinopse.setEnabled(true);
+        codigoCategoria.setEnabled(true);
+        codigoGenero.setEnabled(true);
+        codigoTipoMidia.setEnabled(true);
+        codigoDistribuidora.setEnabled(true);
+        nomeCategoria.setEnabled(true);
+        nomeGenero.setEnabled(true);
+        nomeTipoMidia.setEnabled(true);
+        nomeDistribuidora.setEnabled(true);
+        botaoConsultaCategoria.setEnabled(true);
+        botaoConsultaGenero.setEnabled(true);
+        botaoConsultaTipoMidia.setEnabled(true);
+        botaoConsultaDistribuidora.setEnabled(true);
+        
+        campoCodigo.setText("");
+        campoNome.setText("");
+        campoQntd.setText("");
+        campoAtores.setText("");
+        campoSinopse.setText("");
+        codigoCategoria.setText("");
+        codigoGenero.setText("");
+        codigoTipoMidia.setText("");
+        codigoDistribuidora.setText("");
+        nomeCategoria.setText("");
+        nomeGenero.setText("");
+        nomeTipoMidia.setText("");
+        nomeDistribuidora.setText("");
+        
+        codigoAtual=0;
+        
+        botaoNovo.setEnabled(false);
+        botaoSalvar.setEnabled(true);
+        botaoExcluir.setEnabled(false);
+        botaoCancelar.setEnabled(true);
+        
+        tabelaFilme.setVisible(false);
+        
+    }//GEN-LAST:event_botaoNovoActionPerformed
+
+    private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
+        // TODO add your handling code here:
+        
+        if (!(campoNome.getText()).isEmpty() && !(campoQntd.getText()).isEmpty() && !(codigoCategoria.getText()).isEmpty() && !(codigoGenero.getText()).isEmpty() && !(codigoTipoMidia.getText()).isEmpty() && !(codigoDistribuidora.getText()).isEmpty()){
+            
+            Filmes filme = new Filmes();
+
+            filme.setNome(campoNome.getText());
+            filme.setQtdDiscos(Integer.parseInt(campoQntd.getText()));
+            filme.setAtores(campoAtores.getText());
+            filme.setSinopse(campoSinopse.getText());
+            filme.setCategoria(Integer.parseInt(codigoCategoria.getText()));
+            filme.setGenero(Integer.parseInt(codigoGenero.getText()));
+            filme.setTipoMidia(Integer.parseInt(codigoTipoMidia.getText()));
+            filme.setDistribuidora(Integer.parseInt(codigoDistribuidora.getText()));
+
+            try {
+                Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                if(codigoAtual > 0){
+                    JOptionPane.showMessageDialog(this,objetoRemoto.atualizaFilmes(filme,codigoAtual));
+                }else{
+                    JOptionPane.showMessageDialog(this,objetoRemoto.inserirFilmes(filme));
+                }
+                campoCodigo.setEnabled(false);
+                campoNome.setEnabled(false);
+                campoQntd.setEnabled(false);
+                campoAtores.setEnabled(false);
+                campoSinopse.setEnabled(false);
+                codigoCategoria.setEnabled(false);
+                codigoGenero.setEnabled(false);
+                codigoTipoMidia.setEnabled(false);
+                codigoDistribuidora.setEnabled(false);
+                nomeCategoria.setEnabled(false);
+                nomeGenero.setEnabled(false);
+                nomeTipoMidia.setEnabled(false);
+                nomeDistribuidora.setEnabled(false);
+                botaoConsultaCategoria.setEnabled(false);
+                botaoConsultaGenero.setEnabled(false);
+                botaoConsultaTipoMidia.setEnabled(false);
+                botaoConsultaDistribuidora.setEnabled(false);
+
+                campoCodigo.setText("");
+                campoNome.setText("");
+                campoQntd.setText("");
+                campoAtores.setText("");
+                campoSinopse.setText("");
+                codigoCategoria.setText("");
+                codigoGenero.setText("");
+                codigoTipoMidia.setText("");
+                codigoDistribuidora.setText("");
+                nomeCategoria.setText("");
+                nomeGenero.setText("");
+                nomeTipoMidia.setText("");
+                nomeDistribuidora.setText("");
+                
+                codigoAtual=0;
+                
+                botaoNovo.setEnabled(true);
+                botaoSalvar.setEnabled(false);
+                botaoExcluir.setEnabled(false);
+                botaoCancelar.setEnabled(false);
+                
+                tabelaFilme.setVisible(true);
+                preencheTabela();
+
+            } catch (RemoteException ex) {
+                System.out.println(ex.getMessage());
+            } catch (NotBoundException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(null,"Preenchimento de todos os campos obrigatório ! \nSomente os campos de ATORES e SINOPSE são opcionais.");
+        }
+        
+    }//GEN-LAST:event_botaoSalvarActionPerformed
+
+    private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+            Interface objetoRemoto = (Interface) conexao.lookup("chave");
+
+            JOptionPane.showMessageDialog(this,objetoRemoto.removerFilme(codigoAtual));
+            campoCodigo.setEnabled(false);
+            campoNome.setEnabled(false);
+            campoQntd.setEnabled(false);
+            campoAtores.setEnabled(false);
+            campoSinopse.setEnabled(false);
+            codigoCategoria.setEnabled(false);
+            codigoGenero.setEnabled(false);
+            codigoTipoMidia.setEnabled(false);
+            codigoDistribuidora.setEnabled(false);
+            nomeCategoria.setEnabled(false);
+            nomeGenero.setEnabled(false);
+            nomeTipoMidia.setEnabled(false);
+            nomeDistribuidora.setEnabled(false);
+            botaoConsultaCategoria.setEnabled(false);
+            botaoConsultaGenero.setEnabled(false);
+            botaoConsultaTipoMidia.setEnabled(false);
+            botaoConsultaDistribuidora.setEnabled(false);
+
+            campoCodigo.setText("");
+            campoNome.setText("");
+            campoQntd.setText("");
+            campoAtores.setText("");
+            campoSinopse.setText("");
+            codigoCategoria.setText("");
+            codigoGenero.setText("");
+            codigoTipoMidia.setText("");
+            codigoDistribuidora.setText("");
+            nomeCategoria.setText("");
+            nomeGenero.setText("");
+            nomeTipoMidia.setText("");
+            nomeDistribuidora.setText("");
+            
+            codigoAtual=0;
+            
+            botaoSalvar.setEnabled(false);
+            botaoExcluir.setEnabled(false);
+            botaoCancelar.setEnabled(false);
+            
+            preencheTabela();
+
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        } catch (NotBoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_botaoExcluirActionPerformed
+
+    private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
+        // TODO add your handling code here:
+        campoCodigo.setEnabled(false);
+        campoNome.setEnabled(false);
+        campoQntd.setEnabled(false);
+        campoAtores.setEnabled(false);
+        campoSinopse.setEnabled(false);
+        codigoCategoria.setEnabled(false);
+        codigoGenero.setEnabled(false);
+        codigoTipoMidia.setEnabled(false);
+        codigoDistribuidora.setEnabled(false);
+        nomeCategoria.setEnabled(false);
+        nomeGenero.setEnabled(false);
+        nomeTipoMidia.setEnabled(false);
+        nomeDistribuidora.setEnabled(false);
+        botaoConsultaCategoria.setEnabled(false);
+        botaoConsultaGenero.setEnabled(false);
+        botaoConsultaTipoMidia.setEnabled(false);
+        botaoConsultaDistribuidora.setEnabled(false);
+
+        campoCodigo.setText("");
+        campoNome.setText("");
+        campoQntd.setText("");
+        campoAtores.setText("");
+        campoSinopse.setText("");
+        codigoCategoria.setText("");
+        codigoGenero.setText("");
+        codigoTipoMidia.setText("");
+        codigoDistribuidora.setText("");
+        nomeCategoria.setText("");
+        nomeGenero.setText("");
+        nomeTipoMidia.setText("");
+        nomeDistribuidora.setText("");
+        
+        codigoAtual=0;
+        
+        botaoNovo.setEnabled(true);
+        botaoSalvar.setEnabled(false);
+        botaoExcluir.setEnabled(false);
+        botaoCancelar.setEnabled(false);
+        
+        tabelaFilme.setVisible(true);
+        
+    }//GEN-LAST:event_botaoCancelarActionPerformed
+
+    private void codigoCategoriaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codigoCategoriaFocusLost
+        // TODO add your handling code here:
+        if(!(codigoCategoria.getText()).isEmpty()){
+            try{
+                Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                if( objetoRemoto.pegaCategoria(Integer.parseInt(codigoCategoria.getText())) != null){
+                    nomeCategoria.setText(objetoRemoto.pegaCategoria(Integer.parseInt(codigoCategoria.getText())));
+                }else{
+                    nomeCategoria.setText("");
+                    JOptionPane.showMessageDialog(null,"Código de categoria não localizado");
+                    codigoCategoria.requestFocus();
+                }
+            } catch (RemoteException ex) {
+                System.out.println(ex.getMessage());
+            } catch (NotBoundException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+        }else{
+            nomeCategoria.setText("");
+        }
+        
+    }//GEN-LAST:event_codigoCategoriaFocusLost
+
+    private void codigoGeneroFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codigoGeneroFocusLost
+        // TODO add your handling code here:
+        
+        if(!(codigoGenero.getText()).isEmpty()){
+            try{
+                Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                if( objetoRemoto.pegaGenero(Integer.parseInt(codigoGenero.getText())) != null){
+                    nomeGenero.setText(objetoRemoto.pegaGenero(Integer.parseInt(codigoGenero.getText())));
+                }else{
+                    nomeGenero.setText("");
+                    JOptionPane.showMessageDialog(null,"Código de gênero não localizado");
+                    codigoGenero.requestFocus();
+                }
+            } catch (RemoteException ex) {
+                System.out.println(ex.getMessage());
+            } catch (NotBoundException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+        }else{
+            nomeGenero.setText("");
+        }
+        
+    }//GEN-LAST:event_codigoGeneroFocusLost
+
+    private void codigoTipoMidiaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codigoTipoMidiaFocusLost
+        // TODO add your handling code here:
+        if(!(codigoTipoMidia.getText()).isEmpty()){
+            try{
+                Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                if( objetoRemoto.pegaTipoMidia(Integer.parseInt(codigoTipoMidia.getText())) != null){
+                    nomeTipoMidia.setText(objetoRemoto.pegaTipoMidia(Integer.parseInt(codigoTipoMidia.getText())));
+                }else{
+                    nomeTipoMidia.setText("");
+                    JOptionPane.showMessageDialog(null,"Código do tipo de mídia não localizado");
+                    codigoTipoMidia.requestFocus();
+                }
+            } catch (RemoteException ex) {
+                System.out.println(ex.getMessage());
+            } catch (NotBoundException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+        }else{
+            nomeTipoMidia.setText("");
+        }
+        
+    }//GEN-LAST:event_codigoTipoMidiaFocusLost
+
+    private void codigoDistribuidoraFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codigoDistribuidoraFocusLost
+        // TODO add your handling code here:
+        
+        if(!(codigoDistribuidora.getText()).isEmpty()){
+            try{
+                Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                if( objetoRemoto.pegaDistribuidora(Integer.parseInt(codigoDistribuidora.getText())) != null){
+                    nomeDistribuidora.setText(objetoRemoto.pegaDistribuidora(Integer.parseInt(codigoDistribuidora.getText())));
+                }else{
+                    nomeDistribuidora.setText("");
+                    JOptionPane.showMessageDialog(null,"Código de distribuidora não localizado");
+                    codigoDistribuidora.requestFocus();
+                }
+            } catch (RemoteException ex) {
+                System.out.println(ex.getMessage());
+            } catch (NotBoundException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+        }else{
+            nomeDistribuidora.setText("");
+        }
+        
+    }//GEN-LAST:event_codigoDistribuidoraFocusLost
+
+    private void botaoConsultaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoConsultaCategoriaActionPerformed
+        // TODO add your handling code here:
+        
+        ConsultaCategoria consultacategoria = new ConsultaCategoria(categoria);
+        
+        consultacategoria.addWindowListener(new WindowListener() {
+           @Override
+           public void windowOpened(WindowEvent e) {
+           }
+
+           @Override
+           public void windowClosing(WindowEvent e) {
+           }
+
+           @Override
+           public void windowClosed(WindowEvent e) {
+               
+                categoria = consultacategoria.GetCategoria();
+                
+                if(categoria.getCodigo() > 0){
+                    String dados;
+                    try{
+                        Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                        Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                        dados = objetoRemoto.pegaCategoria(categoria.getCodigo());
+                        if( dados != null){
+                        nomeCategoria.setText(dados);
+                        codigoCategoria.setText(Integer.toString(categoria.getCodigo()));
+                        }else{
+                        nomeCategoria.setText("");
+                        JOptionPane.showMessageDialog(null,"Código de categoria não localizado");
+                        }
+                        //v = null;
+                        
+                    } catch (RemoteException ex) {
+                        System.out.println(ex.getMessage());
+                    } catch (NotBoundException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+               
+           }
+
+           @Override
+           public void windowIconified(WindowEvent e) {
+           }
+
+           @Override
+           public void windowDeiconified(WindowEvent e) {
+           }
+
+           @Override
+           public void windowActivated(WindowEvent e) {
+           }
+
+           @Override
+           public void windowDeactivated(WindowEvent e) {
+           }
+       });
+       consultacategoria.setVisible(true);
+        
+    }//GEN-LAST:event_botaoConsultaCategoriaActionPerformed
+
+    private void botaoConsultaGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoConsultaGeneroActionPerformed
+        // TODO add your handling code here:
+        ConsultaGenero consultagenero = new ConsultaGenero(genero);
+        
+        consultagenero.addWindowListener(new WindowListener() {
+           @Override
+           public void windowOpened(WindowEvent e) {
+           }
+
+           @Override
+           public void windowClosing(WindowEvent e) {
+           }
+
+           @Override
+           public void windowClosed(WindowEvent e) {
+               
+                genero = consultagenero.GetGenero();
+                
+                if(genero.getCodigo() > 0){
+                    String dados;
+                    try{
+                        Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                        Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                        dados = objetoRemoto.pegaGenero(genero.getCodigo());
+                        if( dados != null){
+                        nomeGenero.setText(dados);
+                        codigoGenero.setText(Integer.toString(genero.getCodigo()));
+                        }else{
+                        nomeGenero.setText("");
+                        JOptionPane.showMessageDialog(null,"Código de gênero não localizado");
+                        }
+                        
+                    } catch (RemoteException ex) {
+                        System.out.println(ex.getMessage());
+                    } catch (NotBoundException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+               
+           }
+
+           @Override
+           public void windowIconified(WindowEvent e) {
+           }
+
+           @Override
+           public void windowDeiconified(WindowEvent e) {
+           }
+
+           @Override
+           public void windowActivated(WindowEvent e) {
+           }
+
+           @Override
+           public void windowDeactivated(WindowEvent e) {
+           }
+       });
+       consultagenero.setVisible(true);
+        
+    }//GEN-LAST:event_botaoConsultaGeneroActionPerformed
+
+    private void botaoConsultaTipoMidiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoConsultaTipoMidiaActionPerformed
+        // TODO add your handling code here:
+        ConsultaTipoMidia consultatipomidia = new ConsultaTipoMidia(tipomidia);
+        
+        consultatipomidia.addWindowListener(new WindowListener() {
+           @Override
+           public void windowOpened(WindowEvent e) {
+           }
+
+           @Override
+           public void windowClosing(WindowEvent e) {
+           }
+
+           @Override
+           public void windowClosed(WindowEvent e) {
+               
+                tipomidia = consultatipomidia.GetTipoMidia();
+                
+                if(tipomidia.getCodigo() > 0){
+                    String dados;
+                    try{
+                        Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                        Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                        dados = objetoRemoto.pegaTipoMidia(tipomidia.getCodigo());
+                        if( dados != null){
+                        nomeTipoMidia.setText(dados);
+                        codigoTipoMidia.setText(Integer.toString(tipomidia.getCodigo()));
+                        }else{
+                        nomeTipoMidia.setText("");
+                        JOptionPane.showMessageDialog(null,"Código do tipo de mídia não localizado");
+                        }
+                        
+                    } catch (RemoteException ex) {
+                        System.out.println(ex.getMessage());
+                    } catch (NotBoundException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+               
+           }
+
+           @Override
+           public void windowIconified(WindowEvent e) {
+           }
+
+           @Override
+           public void windowDeiconified(WindowEvent e) {
+           }
+
+           @Override
+           public void windowActivated(WindowEvent e) {
+           }
+
+           @Override
+           public void windowDeactivated(WindowEvent e) {
+           }
+       });
+       consultatipomidia.setVisible(true);
+        
+    }//GEN-LAST:event_botaoConsultaTipoMidiaActionPerformed
+
+    private void botaoConsultaDistribuidoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoConsultaDistribuidoraActionPerformed
+        // TODO add your handling code here:
+        
+        ConsultaDistribuidora consultadistribuidora = new ConsultaDistribuidora(distribuidora);
+        
+        consultadistribuidora.addWindowListener(new WindowListener() {
+           @Override
+           public void windowOpened(WindowEvent e) {
+           }
+
+           @Override
+           public void windowClosing(WindowEvent e) {
+           }
+
+           @Override
+           public void windowClosed(WindowEvent e) {
+               
+                distribuidora = consultadistribuidora.GetDistribuidora();
+                
+                if(distribuidora.getCodigo() > 0){
+                    String dados;
+                    try{
+                        Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                        Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                        dados = objetoRemoto.pegaDistribuidora(distribuidora.getCodigo());
+                        if( dados != null){
+                        nomeDistribuidora.setText(dados);
+                        codigoDistribuidora.setText(Integer.toString(distribuidora.getCodigo()));
+                        }else{
+                        nomeDistribuidora.setText("");
+                        JOptionPane.showMessageDialog(null,"Código de distribuidora não localizado");
+                        }
+                        
+                    } catch (RemoteException ex) {
+                        System.out.println(ex.getMessage());
+                    } catch (NotBoundException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+               
+           }
+
+           @Override
+           public void windowIconified(WindowEvent e) {
+           }
+
+           @Override
+           public void windowDeiconified(WindowEvent e) {
+           }
+
+           @Override
+           public void windowActivated(WindowEvent e) {
+           }
+
+           @Override
+           public void windowDeactivated(WindowEvent e) {
+           }
+       });
+       consultadistribuidora.setVisible(true);
+        
+    }//GEN-LAST:event_botaoConsultaDistribuidoraActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botaoCancelar;
+    private javax.swing.JButton botaoConsultaCategoria;
+    private javax.swing.JButton botaoConsultaDistribuidora;
+    private javax.swing.JButton botaoConsultaGenero;
+    private javax.swing.JButton botaoConsultaTipoMidia;
+    private javax.swing.JButton botaoExcluir;
+    private javax.swing.JButton botaoNovo;
+    private javax.swing.JButton botaoSalvar;
     private javax.swing.JTextField campoAtores;
     private javax.swing.JTextField campoCodigo;
     private javax.swing.JTextField campoNome;
+    private javax.swing.JTextField campoQntd;
     private javax.swing.JTextField campoSinopse;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JTextField codigoCategoria;
+    private javax.swing.JTextField codigoDistribuidora;
+    private javax.swing.JTextField codigoGenero;
+    private javax.swing.JTextField codigoTipoMidia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -289,15 +1066,10 @@ public class Filmeview extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField nomeCategoria;
+    private javax.swing.JTextField nomeDistribuidora;
+    private javax.swing.JTextField nomeGenero;
+    private javax.swing.JTextField nomeTipoMidia;
+    private javax.swing.JTable tabelaFilme;
     // End of variables declaration//GEN-END:variables
 }

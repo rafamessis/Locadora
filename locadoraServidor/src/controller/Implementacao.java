@@ -134,6 +134,32 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
          
       }
     
+    @Override
+    public String pegaCategoria(int id){
+            Connection con = Conexao.getConnection();
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+        
+            try {
+                stmt = con.prepareStatement("select nomeCat from categoria where idcategoria = ?");
+                stmt.setInt(1,id);
+                rs = stmt.executeQuery();
+              
+                if(rs.next()){
+                
+                return rs.getString("nomeCat");
+                
+                }else{
+                   return null;
+                }
+           } catch (SQLException ex) {
+              System.out.println(" Erro ao consultar categorias: "+ ex);
+          }finally{
+           Conexao.closeConnection(con, stmt,rs);
+        }
+         return null;
+      }
+    
     //
     //CLIENTES
     //
@@ -245,6 +271,32 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
          
       }
     
+    @Override
+    public String pegaCliente(int id){
+            Connection con = Conexao.getConnection();
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+        
+            try {
+                stmt = con.prepareStatement("select nomeCliente from cliente where idCliente = ?");
+                stmt.setInt(1,id);
+                rs = stmt.executeQuery();
+              
+                if(rs.next()){
+                
+                return rs.getString("nomeCliente");
+                
+                }else{
+                   return null;
+                }
+           } catch (SQLException ex) {
+              System.out.println(" Erro ao consultar cliente: "+ ex);
+          }finally{
+           Conexao.closeConnection(con, stmt,rs);
+        }
+         return null;
+      }
+    
     //
     // DISTRIBUIDORA
     //
@@ -336,6 +388,33 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
           return distribuidoras;
          
       }
+    
+    @Override
+    public String pegaDistribuidora(int id){
+            Connection con = Conexao.getConnection();
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+        
+            try {
+                stmt = con.prepareStatement("select nome from distribuidora where iddistribuidora = ?");
+                stmt.setInt(1,id);
+                rs = stmt.executeQuery();
+              
+                if(rs.next()){
+                
+                return rs.getString("nome");
+                
+                }else{
+                   return null;
+                }
+           } catch (SQLException ex) {
+              System.out.println(" Erro ao consultar distribuidora: "+ ex);
+          }finally{
+           Conexao.closeConnection(con, stmt,rs);
+        }
+         return null;
+      }
+    
     
     //
     // FILMES
@@ -454,6 +533,32 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
          
       }
     
+    @Override
+    public String pegaFilmes(int id){
+            Connection con = Conexao.getConnection();
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+        
+            try {
+                stmt = con.prepareStatement("select nomeFilme from filmes where idFilmes = ?");
+                stmt.setInt(1,id);
+                rs = stmt.executeQuery();
+              
+                if(rs.next()){
+                
+                return rs.getString("nomeFilme");
+                
+                }else{
+                   return null;
+                }
+           } catch (SQLException ex) {
+              System.out.println(" Erro ao consultar filme: "+ ex);
+          }finally{
+           Conexao.closeConnection(con, stmt,rs);
+        }
+         return null;
+      }
+    
     //
     // FUNCIONARIO
     //
@@ -528,7 +633,7 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
             List<Funcionarios> funcionarios = new ArrayList<>();
         
             try {
-                stmt = con.prepareStatement("select * from funcionarios");
+                stmt = con.prepareStatement("select * from funcionario");
                 rs = stmt.executeQuery();
               
                 while(rs.next()){
@@ -551,28 +656,31 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
          
       }
     
-    
-    /*@Override
-    public String inserirFuncionario(Funcionarios funcionarios){
-        try {
-            Conexao conexao = new Conexao();
-            String sql = "INSERT INTO Pessoa (nomeFuncionario,cpfFuncionario,telefoneFuncionario"
-                    + "salarioFuncionario,cargahorararia) VALUES (?,?,?,?,?,?,?)";
-            PreparedStatement ps = conexao.getConnection().prepareStatement(sql);
-            ps.setString(1, funcionarios.getNome());
-            ps.setInt(2, funcionarios.getCpf());
-            ps.setString(3, funcionarios.getTelefone());
-            ps.setFloat(4,funcionarios.getSalario());
-            ps.setString(5,funcionarios.getCargahoraria());
-            
-            
-            ps.execute();
-            
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+    @Override
+    public String pegaFuncionario(int id){
+            Connection con = Conexao.getConnection();
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+        
+            try {
+                stmt = con.prepareStatement("select nomeFuncionario from funcionario where idFuncionario = ?");
+                stmt.setInt(1,id);
+                rs = stmt.executeQuery();
+              
+                if(rs.next()){
+                
+                return rs.getString("nomeFuncionario");
+                
+                }else{
+                   return null;
+                }
+           } catch (SQLException ex) {
+              System.out.println(" Erro ao consultar funcionario: "+ ex);
+          }finally{
+           Conexao.closeConnection(con, stmt,rs);
         }
-        return "Inserido Com sucesso!";
-    }*/
+         return null;
+      }
     
     //
     // GENERO
@@ -665,6 +773,32 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
          
           return generos;
          
+      }
+    
+    @Override
+    public String pegaGenero(int id){
+            Connection con = Conexao.getConnection();
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+        
+            try {
+                stmt = con.prepareStatement("select nomeGenero from genero where idgenero = ?");
+                stmt.setInt(1,id);
+                rs = stmt.executeQuery();
+              
+                if(rs.next()){
+                
+                return rs.getString("nomeGenero");
+                
+                }else{
+                   return null;
+                }
+           } catch (SQLException ex) {
+              System.out.println(" Erro ao consultar genero: "+ ex);
+          }finally{
+           Conexao.closeConnection(con, stmt,rs);
+        }
+         return null;
       }
     
     //
@@ -861,6 +995,32 @@ public class Implementacao extends UnicastRemoteObject implements Interface{
          
           return tipos;
          
+      }
+    
+    @Override
+    public String pegaTipoMidia(int id){
+            Connection con = Conexao.getConnection();
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+        
+            try {
+                stmt = con.prepareStatement("select nomeTipo from tipomidia where idtipoMidia = ?");
+                stmt.setInt(1,id);
+                rs = stmt.executeQuery();
+              
+                if(rs.next()){
+                
+                return rs.getString("nomeTipo");
+                
+                }else{
+                   return null;
+                }
+           } catch (SQLException ex) {
+              System.out.println(" Erro ao consultar o tipo da midia: "+ ex);
+          }finally{
+           Conexao.closeConnection(con, stmt,rs);
+        }
+         return null;
       }
    
 }

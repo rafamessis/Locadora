@@ -5,6 +5,17 @@
  */
 package view;
 
+import controller.Interface;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.Funcionarios;
+
 /**
  *
  * @author Rafael
@@ -14,10 +25,38 @@ public class Funcionarioview extends javax.swing.JInternalFrame {
     /**
      * Creates new form Funcionarioview
      */
+    List<Funcionarios> funcionarios = null;
+    int codigoAtual = 0;
+    
+    
+    
     public Funcionarioview() {
         initComponents();
+        preencheTabela();
     }
 
+    public void preencheTabela(){
+        
+        try{
+        Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+        Interface objetoRemoto = (Interface) conexao.lookup("chave");
+        
+        DefaultTableModel tabela = (DefaultTableModel)tabelaFuncionario.getModel();
+        tabelaFuncionario.setRowSorter(new TableRowSorter(tabela));
+        tabela.setNumRows(0);
+        funcionarios = objetoRemoto.listaFuncionario();
+        for(int i=0;i<funcionarios.size();i++){
+            tabela.addRow(new Object[]{funcionarios.get(i).getCodigo(),funcionarios.get(i).getNome(),
+                funcionarios.get(i).getCpf()});
+        }
+    } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        } catch (NotBoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,41 +67,45 @@ public class Funcionarioview extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        campoNome = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        campoCodigo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        salvarFunc = new javax.swing.JButton();
+        campoCPF = new javax.swing.JTextField();
+        botaoSalvar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        tabelaFuncionario = new javax.swing.JTable();
+        botaoExcluir = new javax.swing.JButton();
+        botaoNovo = new javax.swing.JButton();
+        botaoCancelar = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Cadastro de Funcionários");
 
         jLabel1.setText("Nome: ");
 
+        campoNome.setEnabled(false);
+
         jLabel2.setText("Codigo: ");
 
-        jTextField2.setEnabled(false);
+        campoCodigo.setEnabled(false);
 
         jLabel3.setText("CPF: ");
 
-        salvarFunc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/GravarPequeno.png"))); // NOI18N
-        salvarFunc.setText("Salvar");
-        salvarFunc.addActionListener(new java.awt.event.ActionListener() {
+        campoCPF.setEnabled(false);
+
+        botaoSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/GravarPequeno.png"))); // NOI18N
+        botaoSalvar.setText("Salvar");
+        botaoSalvar.setEnabled(false);
+        botaoSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                salvarFuncActionPerformed(evt);
+                botaoSalvarActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaFuncionario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Código", "Nome", "CPF"
@@ -76,42 +119,75 @@ public class Funcionarioview extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        tabelaFuncionario.getTableHeader().setReorderingAllowed(false);
+        tabelaFuncionario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaFuncionarioMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabelaFuncionario);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/ExcluirPequeno.png"))); // NOI18N
-        jButton1.setText("Excluir");
+        botaoExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/ExcluirPequeno.png"))); // NOI18N
+        botaoExcluir.setText("Excluir");
+        botaoExcluir.setEnabled(false);
+        botaoExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoExcluirActionPerformed(evt);
+            }
+        });
+
+        botaoNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/NovoPequeno.png"))); // NOI18N
+        botaoNovo.setText("Novo");
+        botaoNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoNovoActionPerformed(evt);
+            }
+        });
+
+        botaoCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/CancelarPequeno.png"))); // NOI18N
+        botaoCancelar.setText("Cancelar");
+        botaoCancelar.setEnabled(false);
+        botaoCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel2)
-                        .addGap(4, 4, 4)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel1)
-                        .addGap(4, 4, 4)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel3)
-                        .addGap(4, 4, 4)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(salvarFunc)
-                        .addGap(51, 51, 51)
-                        .addComponent(jButton1)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addComponent(jLabel2)
+                            .addGap(4, 4, 4)
+                            .addComponent(campoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(16, 16, 16)
+                            .addComponent(jLabel1)
+                            .addGap(4, 4, 4)
+                            .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(24, 24, 24)
+                            .addComponent(jLabel3)
+                            .addGap(4, 4, 4)
+                            .addComponent(campoCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(botaoNovo)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(botaoSalvar)
+                            .addGap(10, 10, 10)
+                            .addComponent(botaoExcluir)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(botaoCancelar))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -121,48 +197,182 @@ public class Funcionarioview extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(jLabel2))
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(jLabel1))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(jLabel3))
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
+                    .addComponent(campoCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(salvarFunc)
-                    .addComponent(jButton1))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(botaoSalvar)
+                    .addComponent(botaoExcluir)
+                    .addComponent(botaoNovo)
+                    .addComponent(botaoCancelar))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void salvarFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salvarFuncActionPerformed
+    private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
+        
+        if (!(campoNome.getText()).isEmpty() && !(campoCPF.getText()).isEmpty()){
+            
+            Funcionarios funcionario = new Funcionarios();
+
+            funcionario.setNome(campoNome.getText());
+            funcionario.setCpf(Integer.parseInt(campoCPF.getText()));
+
+            try {
+                Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+                Interface objetoRemoto = (Interface) conexao.lookup("chave");
+                if(codigoAtual > 0){
+                    JOptionPane.showMessageDialog(this,objetoRemoto.atualizaFuncionario(funcionario,codigoAtual));
+                }else{
+                    JOptionPane.showMessageDialog(this,objetoRemoto.inserirFuncionario(funcionario));
+                }
+                campoCodigo.setEnabled(false);
+                campoNome.setEnabled(false);
+                campoCPF.setEnabled(false);
+                campoCodigo.setText("");
+                campoNome.setText("");
+                campoCPF.setText("");
+                
+                codigoAtual=0;
+                
+                botaoNovo.setEnabled(true);
+                botaoSalvar.setEnabled(false);
+                botaoExcluir.setEnabled(false);
+                botaoCancelar.setEnabled(false);
+                tabelaFuncionario.setVisible(true);
+                preencheTabela();
+
+            } catch (RemoteException ex) {
+                System.out.println(ex.getMessage());
+            } catch (NotBoundException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(null,"Preenchimento de todos os campos obrigatório !");
+        }
+        
+    }//GEN-LAST:event_botaoSalvarActionPerformed
+
+    private void tabelaFuncionarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaFuncionarioMouseClicked
+        // TODO add your handling code here:
+        
+        Funcionarios funcionario = funcionarios.get(tabelaFuncionario.getSelectedRow());
+           
+        campoCodigo.setText(String.valueOf(funcionario.getCodigo()));
+        campoNome.setText(funcionario.getNome());
+        campoCPF.setText(String.valueOf(funcionario.getCpf()));
+        
+        codigoAtual = funcionario.getCodigo();
+        
+        campoNome.setEnabled(true);
+        campoCPF.setEnabled(true);
+        botaoSalvar.setEnabled(true);
+        botaoExcluir.setEnabled(true);
+        botaoCancelar.setEnabled(true);
         
         
+    }//GEN-LAST:event_tabelaFuncionarioMouseClicked
+
+    private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
+        // TODO add your handling code here:
         
-    }//GEN-LAST:event_salvarFuncActionPerformed
+        campoCodigo.setEnabled(false);
+        campoNome.setEnabled(true);
+        campoCPF.setEnabled(true);
+        campoCodigo.setText("");
+        campoNome.setText("");
+        campoCPF.setText("");
+        
+        codigoAtual=0;
+        
+        botaoNovo.setEnabled(false);
+        botaoSalvar.setEnabled(true);
+        botaoExcluir.setEnabled(false);
+        botaoCancelar.setEnabled(true);
+        tabelaFuncionario.setVisible(false);
+        
+    }//GEN-LAST:event_botaoNovoActionPerformed
+
+    private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+            Interface objetoRemoto = (Interface) conexao.lookup("chave");
+
+            JOptionPane.showMessageDialog(this,objetoRemoto.removerFuncionario(codigoAtual));
+            campoCodigo.setEnabled(false);
+            campoNome.setEnabled(false);
+            campoCPF.setEnabled(false);
+            campoCodigo.setText("");
+            campoNome.setText("");
+            campoCPF.setText("");
+            
+            codigoAtual=0;
+            
+            botaoSalvar.setEnabled(false);
+            botaoExcluir.setEnabled(false);
+            botaoCancelar.setEnabled(false);
+            preencheTabela();
+
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        } catch (NotBoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+    }//GEN-LAST:event_botaoExcluirActionPerformed
+
+    private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
+        // TODO add your handling code here:
+        
+        campoCodigo.setEnabled(false);
+        campoNome.setEnabled(false);
+        campoCPF.setEnabled(false);
+        
+        campoCodigo.setText("");
+        campoNome.setText("");
+        campoCPF.setText("");
+        
+        codigoAtual=0;
+        
+        botaoNovo.setEnabled(true);
+        botaoSalvar.setEnabled(false);
+        botaoExcluir.setEnabled(false);
+        botaoCancelar.setEnabled(false);
+        
+        tabelaFuncionario.setVisible(true);
+    }//GEN-LAST:event_botaoCancelarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton botaoCancelar;
+    private javax.swing.JButton botaoExcluir;
+    private javax.swing.JButton botaoNovo;
+    private javax.swing.JButton botaoSalvar;
+    private javax.swing.JTextField campoCPF;
+    private javax.swing.JTextField campoCodigo;
+    private javax.swing.JTextField campoNome;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JButton salvarFunc;
+    private javax.swing.JTable tabelaFuncionario;
     // End of variables declaration//GEN-END:variables
 }

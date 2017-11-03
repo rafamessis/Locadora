@@ -14,54 +14,51 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import model.Categoria;
-import model.TipoMidia;
+import model.Filmes;
 
 /**
  *
  * @author Hudson
  */
-public class ConsultaTipoMidia extends javax.swing.JFrame {
+public class ConsultaFilme extends javax.swing.JFrame {
 
     /**
      * Creates new form ConsultaTipoMidia
      */
     
-    private List<TipoMidia> tiposmidia = new ArrayList<TipoMidia>();
-    private TipoMidia tipomidia;
+    private List<Filmes> filmes = new ArrayList<Filmes>();
+    private Filmes filme;
     
-    public ConsultaTipoMidia() {
+    public ConsultaFilme() {
         initComponents();
         
         try{
         Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
         Interface objetoRemoto = (Interface) conexao.lookup("chave");
         
-        DefaultTableModel tabela = (DefaultTableModel)tabelaTipoMidia.getModel();
-        tabelaTipoMidia.setRowSorter(new TableRowSorter(tabela));
+        DefaultTableModel tabela = (DefaultTableModel)tabelaFilme.getModel();
+        tabelaFilme.setRowSorter(new TableRowSorter(tabela));
         tabela.setNumRows(0);
         
-        tiposmidia = objetoRemoto.listaTipoMidias();
-        for(TipoMidia t: tiposmidia){
-            tabela.addRow(new Object[]{t.getCodigo(), t.getNome()});
+        filmes = objetoRemoto.listaFilmes();
+        for(Filmes f: filmes){
+            tabela.addRow(new Object[]{f.getCodigo(), f.getNome(), objetoRemoto.pegaGenero(f.getGenero()), objetoRemoto.pegaDistribuidora(f.getDistribuidora()), objetoRemoto.pegaTipoMidia(f.getTipoMidia()), f.getAtores(), f.getQtdDiscos(), objetoRemoto.pegaCategoria(f.getCategoria()), f.getSinopse()});
         }
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         } catch (NotBoundException ex) {
             System.out.println(ex.getMessage());
         }
-        
     }
 
-    
-    public ConsultaTipoMidia(TipoMidia tipomidia) {
+    public ConsultaFilme(Filmes filme) {
         this();
         
-        this.tipomidia = tipomidia;
+        this.filme = filme;
     }
 
-    public TipoMidia GetTipoMidia() {
-        return tipomidia;
+    public Filmes GetFilme() {
+        return filme;
     }
     
     /**
@@ -74,36 +71,36 @@ public class ConsultaTipoMidia extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaTipoMidia = new javax.swing.JTable();
+        tabelaFilme = new javax.swing.JTable();
         botaoSelecionar = new javax.swing.JButton();
         botaoCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Consulta de Tipo de Mídia do Filme");
 
-        tabelaTipoMidia.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaFilme.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Código", "Tipo Mídia"
+                "Código", "Nome", "Gênero", "Distribuidora", "Tipo Midia", "Atores", "Quantidade", "Categoria", "Sinopse"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tabelaTipoMidia.getTableHeader().setReorderingAllowed(false);
-        tabelaTipoMidia.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabelaFilme.getTableHeader().setReorderingAllowed(false);
+        tabelaFilme.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelaTipoMidiaMouseClicked(evt);
+                tabelaFilmeMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tabelaTipoMidia);
+        jScrollPane1.setViewportView(tabelaFilme);
 
         botaoSelecionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/GravarPequeno.png"))); // NOI18N
         botaoSelecionar.setText("Selecionar");
@@ -126,16 +123,15 @@ public class ConsultaTipoMidia extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(botaoSelecionar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(305, 305, 305)
+                .addComponent(botaoSelecionar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(316, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,33 +150,28 @@ public class ConsultaTipoMidia extends javax.swing.JFrame {
 
     private void botaoSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSelecionarActionPerformed
         // TODO add your handling code here:
+        Locacaoview telaLocacao = new Locacaoview();
         
-        Filmeview telaFilme = new Filmeview();
-        
-        if(tabelaTipoMidia.getSelectedRow() == -1)
+        if(tabelaFilme.getSelectedRow() == -1)
             return;
                 
         
-        tipomidia = tiposmidia.get(tabelaTipoMidia.getSelectedRow());
+        filme = filmes.get(tabelaFilme.getSelectedRow());
         dispose();
-        
     }//GEN-LAST:event_botaoSelecionarActionPerformed
 
     private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
         // TODO add your handling code here:
         dispose();
-        
     }//GEN-LAST:event_botaoCancelarActionPerformed
 
-    private void tabelaTipoMidiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaTipoMidiaMouseClicked
+    private void tabelaFilmeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaFilmeMouseClicked
         // TODO add your handling code here:
-        
         if (evt.getClickCount() == 2)  
         {  
             botaoSelecionar.doClick();
         }
-        
-    }//GEN-LAST:event_tabelaTipoMidiaMouseClicked
+    }//GEN-LAST:event_tabelaFilmeMouseClicked
 
     /**
      * @param args the command line arguments
@@ -199,20 +190,23 @@ public class ConsultaTipoMidia extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsultaTipoMidia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultaFilme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsultaTipoMidia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultaFilme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsultaTipoMidia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultaFilme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsultaTipoMidia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultaFilme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConsultaTipoMidia().setVisible(true);
+                new ConsultaFilme().setVisible(true);
             }
         });
     }
@@ -221,6 +215,6 @@ public class ConsultaTipoMidia extends javax.swing.JFrame {
     private javax.swing.JButton botaoCancelar;
     private javax.swing.JButton botaoSelecionar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tabelaTipoMidia;
+    private javax.swing.JTable tabelaFilme;
     // End of variables declaration//GEN-END:variables
 }

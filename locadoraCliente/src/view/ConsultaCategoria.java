@@ -5,6 +5,17 @@
  */
 package view;
 
+import controller.Interface;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.Categoria;
+
 /**
  *
  * @author Hudson
@@ -14,9 +25,43 @@ public class ConsultaCategoria extends javax.swing.JFrame {
     /**
      * Creates new form ConsultaCategoria
      */
+    
+    private List<Categoria> categorias = new ArrayList<Categoria>();
+    private Categoria categoria;
+    
     public ConsultaCategoria() {
         initComponents();
+        
+        try{
+        Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+        Interface objetoRemoto = (Interface) conexao.lookup("chave");
+        
+        DefaultTableModel tabela = (DefaultTableModel)tabelaCategorias.getModel();
+        tabelaCategorias.setRowSorter(new TableRowSorter(tabela));
+        tabela.setNumRows(0);
+        
+        categorias = objetoRemoto.listaCategoria();
+        for(Categoria c: categorias){
+            tabela.addRow(new Object[]{c.getCodigo(), c.getNome(), c.getValorLoc()});
+        }
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        } catch (NotBoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
     }
+    
+    public ConsultaCategoria(Categoria categoria) {
+        this();
+        
+        this.categoria = categoria;
+    }
+
+    public Categoria GetCategoria() {
+        return categoria;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,9 +82,19 @@ public class ConsultaCategoria extends javax.swing.JFrame {
 
         botaoSelecionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/GravarPequeno.png"))); // NOI18N
         botaoSelecionar.setText("Selecionar");
+        botaoSelecionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoSelecionarActionPerformed(evt);
+            }
+        });
 
         botaoCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/CancelarPequeno.png"))); // NOI18N
         botaoCancelar.setText("Cancelar");
+        botaoCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCancelarActionPerformed(evt);
+            }
+        });
 
         tabelaCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -50,7 +105,7 @@ public class ConsultaCategoria extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -58,6 +113,11 @@ public class ConsultaCategoria extends javax.swing.JFrame {
             }
         });
         tabelaCategorias.getTableHeader().setReorderingAllowed(false);
+        tabelaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaCategoriasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelaCategorias);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -90,6 +150,34 @@ public class ConsultaCategoria extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void botaoSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSelecionarActionPerformed
+        // TODO add your handling code here:
+        Filmeview telaFilme = new Filmeview();
+        
+        if(tabelaCategorias.getSelectedRow() == -1)
+            return;
+                
+        
+        categoria = categorias.get(tabelaCategorias.getSelectedRow());
+        dispose();
+        
+    }//GEN-LAST:event_botaoSelecionarActionPerformed
+
+    private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+        
+    }//GEN-LAST:event_botaoCancelarActionPerformed
+
+    private void tabelaCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCategoriasMouseClicked
+        // TODO add your handling code here:
+        if (evt.getClickCount() == 2)  
+        {  
+            botaoSelecionar.doClick();
+        }
+        
+    }//GEN-LAST:event_tabelaCategoriasMouseClicked
 
     /**
      * @param args the command line arguments

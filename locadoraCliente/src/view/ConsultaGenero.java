@@ -5,6 +5,18 @@
  */
 package view;
 
+import controller.Interface;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.Categoria;
+import model.Genero;
+
 /**
  *
  * @author Hudson
@@ -14,10 +26,43 @@ public class ConsultaGenero extends javax.swing.JFrame {
     /**
      * Creates new form ConsultaGenero
      */
+    
+    private List<Genero> generos = new ArrayList<Genero>();
+    private Genero genero;
+    
     public ConsultaGenero() {
         initComponents();
+        
+        try{
+        Registry conexao = LocateRegistry.getRegistry("127.0.0.1",1500);
+        Interface objetoRemoto = (Interface) conexao.lookup("chave");
+        
+        DefaultTableModel tabela = (DefaultTableModel)tabelaGeneros.getModel();
+        tabelaGeneros.setRowSorter(new TableRowSorter(tabela));
+        tabela.setNumRows(0);
+        
+        generos = objetoRemoto.listaGeneros();
+        for(Genero g: generos){
+            tabela.addRow(new Object[]{g.getCodigo(), g.getNome()});
+        }
+        } catch (RemoteException ex) {
+            System.out.println(ex.getMessage());
+        } catch (NotBoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
     }
 
+    public ConsultaGenero(Genero genero) {
+        this();
+        
+        this.genero = genero;
+    }
+
+    public Genero GetGenero() {
+        return genero;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,13 +97,28 @@ public class ConsultaGenero extends javax.swing.JFrame {
             }
         });
         tabelaGeneros.getTableHeader().setReorderingAllowed(false);
+        tabelaGeneros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaGenerosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelaGeneros);
 
         botaoSelecionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/GravarPequeno.png"))); // NOI18N
         botaoSelecionar.setText("Selecionar");
+        botaoSelecionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoSelecionarActionPerformed(evt);
+            }
+        });
 
         botaoCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/CancelarPequeno.png"))); // NOI18N
         botaoCancelar.setText("Cancelar");
+        botaoCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,6 +150,36 @@ public class ConsultaGenero extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void botaoSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSelecionarActionPerformed
+        // TODO add your handling code here:
+        
+        Filmeview telaFilme = new Filmeview();
+        
+        if(tabelaGeneros.getSelectedRow() == -1)
+            return;
+                
+        
+        genero = generos.get(tabelaGeneros.getSelectedRow());
+        dispose();
+        
+    }//GEN-LAST:event_botaoSelecionarActionPerformed
+
+    private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+        
+    }//GEN-LAST:event_botaoCancelarActionPerformed
+
+    private void tabelaGenerosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaGenerosMouseClicked
+        // TODO add your handling code here:
+        
+        if (evt.getClickCount() == 2)  
+        {  
+            botaoSelecionar.doClick();
+        }
+        
+    }//GEN-LAST:event_tabelaGenerosMouseClicked
 
     /**
      * @param args the command line arguments
