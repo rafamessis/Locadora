@@ -29,7 +29,7 @@ CREATE TABLE `categoria` (
   `nomeCat` varchar(45) NOT NULL,
   `valorLoc` double NOT NULL,
   PRIMARY KEY (`idcategoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `categoria` (
 
 LOCK TABLES `categoria` WRITE;
 /*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
-INSERT INTO `categoria` VALUES (1,'Lançamento',8);
+INSERT INTO `categoria` VALUES (1,'Lançamento',8),(2,'Semi-Lançamento',6);
 /*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,7 +59,7 @@ CREATE TABLE `cliente` (
   `numeroCliente` int(11) DEFAULT NULL,
   `cidadeCliente` varchar(45) NOT NULL,
   PRIMARY KEY (`idCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'Hudson',1,'1','1','1',1,'1'),(2,'Hudson2',1,'1','1','1',1,'1'),(3,'Hudson3',1,'1','1','1',1,'1'),(4,'Hudson4',1,'1','1','1',NULL,'1');
+INSERT INTO `cliente` VALUES (1,'Hudson',1,'1','1','1',1,'1'),(2,'Hudson2',1,'1','1','1',1,'1'),(3,'Hudson10',1,'1','1','1',1,'1'),(4,'Hudson11',1,'1','1','1',NULL,'1'),(5,'Hudson5',1,'1','1','1',NULL,'1'),(9,'Hudson Henrique da Silva',628570465,'37 3222-2222','hudson@google.com.br','Rua Goiás, 150, Centro',NULL,'Divinópolis');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,7 +83,7 @@ CREATE TABLE `distribuidora` (
   `iddistribuidora` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) NOT NULL,
   PRIMARY KEY (`iddistribuidora`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +92,7 @@ CREATE TABLE `distribuidora` (
 
 LOCK TABLES `distribuidora` WRITE;
 /*!40000 ALTER TABLE `distribuidora` DISABLE KEYS */;
-INSERT INTO `distribuidora` VALUES (1,'Universal Pictures');
+INSERT INTO `distribuidora` VALUES (1,'Universal Pictures'),(2,'Globo Filmes');
 /*!40000 ALTER TABLE `distribuidora` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +131,7 @@ CREATE TABLE `filmes` (
 
 LOCK TABLES `filmes` WRITE;
 /*!40000 ALTER TABLE `filmes` DISABLE KEYS */;
-INSERT INTO `filmes` VALUES (1,'Velozes e Furiosos',4,1,1,1,1,NULL,NULL);
+INSERT INTO `filmes` VALUES (1,'Velozes e Furiosos',4,1,1,1,1,'Paul Walker, Vin Diesel','Desde que o ex-policial Brian O\'Conner e Mia Torretto libertaram Dom da prisão, eles viajam pelas fronteiras para fugir das autoridades. No Rio de Janeiro, eles fazem um último trabalho antes que possam ganhar sua liberdade definitiva.');
 /*!40000 ALTER TABLE `filmes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,7 +148,7 @@ CREATE TABLE `funcionario` (
   `cpfFuncionario` int(11) NOT NULL,
   PRIMARY KEY (`idFuncionario`),
   UNIQUE KEY `cpfFuncionario_UNIQUE` (`cpfFuncionario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,6 +157,7 @@ CREATE TABLE `funcionario` (
 
 LOCK TABLES `funcionario` WRITE;
 /*!40000 ALTER TABLE `funcionario` DISABLE KEYS */;
+INSERT INTO `funcionario` VALUES (1,'Maria Eduarda',526396857);
 /*!40000 ALTER TABLE `funcionario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,7 +172,7 @@ CREATE TABLE `genero` (
   `idgenero` int(11) NOT NULL AUTO_INCREMENT,
   `nomeGenero` varchar(45) NOT NULL,
   PRIMARY KEY (`idgenero`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +181,7 @@ CREATE TABLE `genero` (
 
 LOCK TABLES `genero` WRITE;
 /*!40000 ALTER TABLE `genero` DISABLE KEYS */;
-INSERT INTO `genero` VALUES (1,'Ação');
+INSERT INTO `genero` VALUES (1,'Ação'),(2,'Suspense');
 /*!40000 ALTER TABLE `genero` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +193,7 @@ DROP TABLE IF EXISTS `locacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `locacao` (
-  `idLocacao` int(11) NOT NULL,
+  `idLocacao` int(11) NOT NULL AUTO_INCREMENT,
   `idfilmeLocado` int(11) NOT NULL,
   `idClienteLocado` int(11) NOT NULL,
   `idFuncionarioLocado` int(11) NOT NULL,
@@ -204,7 +205,7 @@ CREATE TABLE `locacao` (
   CONSTRAINT `Id Cliente` FOREIGN KEY (`idClienteLocado`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `Id Filmes` FOREIGN KEY (`idfilmeLocado`) REFERENCES `filmes` (`idFilmes`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `Id Funcionario` FOREIGN KEY (`idFuncionarioLocado`) REFERENCES `funcionario` (`idFuncionario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,6 +214,7 @@ CREATE TABLE `locacao` (
 
 LOCK TABLES `locacao` WRITE;
 /*!40000 ALTER TABLE `locacao` DISABLE KEYS */;
+INSERT INTO `locacao` VALUES (1,1,1,1,'2017-11-02'),(2,1,9,1,'2017-11-03');
 /*!40000 ALTER TABLE `locacao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,7 +229,7 @@ CREATE TABLE `tipomidia` (
   `idtipoMidia` int(11) NOT NULL AUTO_INCREMENT,
   `nomeTipo` varchar(45) NOT NULL,
   PRIMARY KEY (`idtipoMidia`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,9 +238,13 @@ CREATE TABLE `tipomidia` (
 
 LOCK TABLES `tipomidia` WRITE;
 /*!40000 ALTER TABLE `tipomidia` DISABLE KEYS */;
-INSERT INTO `tipomidia` VALUES (1,'DVD');
+INSERT INTO `tipomidia` VALUES (1,'DVD'),(2,'VHS');
 /*!40000 ALTER TABLE `tipomidia` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'locadorafilme'
+--
 
 --
 -- Dumping routines for database 'locadorafilme'
@@ -253,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-29 17:13:11
+-- Dump completed on 2017-11-03 12:03:50
